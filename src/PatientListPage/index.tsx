@@ -11,6 +11,7 @@ import { useStateValue } from "../state";
 import { TableCell } from "@material-ui/core";
 import { TableRow } from "@material-ui/core";
 import { TableBody } from "@material-ui/core";
+import { addPatient, setPatient } from "../state/reducer";
 
 const PatientListPage = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -31,7 +32,7 @@ const PatientListPage = () => {
         `${apiBaseUrl}/patients`,
         values
       );
-      dispatch({ type: "ADD_PATIENT", payload: newPatient });
+      dispatch(addPatient(newPatient));
       closeModal();
     } catch (e: unknown) {
       if (axios.isAxiosError(e)) {
@@ -44,8 +45,8 @@ const PatientListPage = () => {
     }
   };
 
-  const setPatient = (patient : Patient) => {
-    dispatch({ type: "SET_PATIENT", payload : patient});
+  const setStatePatient = (patient : Patient) => {
+    dispatch(setPatient(patient));
   };
 
   return (
@@ -75,7 +76,7 @@ const PatientListPage = () => {
                 <HealthRatingBar showText={false} rating={1} />
               </TableCell>
               <TableCell>
-                <Button component={Link} to="/patient" variant="contained" color="primary" onClick={() => setPatient(patient)}>Read more</Button>
+                <Button component={Link} to="/patient" variant="contained" color="primary" onClick={() => setStatePatient(patient)}>Read more</Button>
               </TableCell>
             </TableRow>
           ))}
