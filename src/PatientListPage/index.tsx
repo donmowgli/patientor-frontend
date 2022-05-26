@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Box, Table, Button, TableHead, Typography } from "@material-ui/core";
-
+import { Link } from "react-router-dom";
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
@@ -44,6 +44,10 @@ const PatientListPage = () => {
     }
   };
 
+  const setPatient = (patient : Patient) => {
+    dispatch({ type: "SET_PATIENT", payload : patient});
+  };
+
   return (
     <div className="App">
       <Box>
@@ -58,6 +62,7 @@ const PatientListPage = () => {
             <TableCell>Gender</TableCell>
             <TableCell>Occupation</TableCell>
             <TableCell>Health Rating</TableCell>
+            <TableCell>More</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -68,6 +73,9 @@ const PatientListPage = () => {
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
                 <HealthRatingBar showText={false} rating={1} />
+              </TableCell>
+              <TableCell>
+                <Button component={Link} to="/patient" variant="contained" color="primary" onClick={() => setPatient(patient)}>Read more</Button>
               </TableCell>
             </TableRow>
           ))}
