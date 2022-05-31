@@ -20,7 +20,7 @@ export interface Patient {
   entries?: Array<Entry>;
 }
 
-interface baseEntry {
+export interface baseEntry {
   id: string;
   description: string;
   date: string;
@@ -62,4 +62,5 @@ enum healthCheckRating {
 }
 
 export type Entry = baseEntry | healthCheckEntry | occupationalHealthcareEntry | hospitalEntry ;
+export type exactEntry = healthCheckEntry | occupationalHealthcareEntry | hospitalEntry ;
 

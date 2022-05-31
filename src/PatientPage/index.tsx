@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import axios from 'axios';
 import { useStateValue } from "../state";
 import { Typography } from "@material-ui/core";
-import { Patient, Diagnosis, Entry } from "../types";
+import { Patient, Entry } from "../types";
+import { Entries } from "./entries";
 import { apiBaseUrl } from "../constants";
 
 const PatientPage = () => {
-    const [{ patient, diagnoses }] = useStateValue();
+    const [{ patient }] = useStateValue();
     const [sPatient, setsPatient] = useState(patient);
-    const [patientDiagnoses, setPatientDiagnoses] = useState(diagnoses);
 
     React.useEffect(() => {
         const getInfo = async () => {
@@ -20,20 +20,6 @@ const PatientPage = () => {
         void getInfo();
     }, [patient]);
 
-    React.useEffect(() => {
-        const setNewPatientDiagnoses = () => {
-            const newDiagnoses: Array<Diagnosis> = [];
-            sPatient.entries?.forEach(entry => {entry.diagnosisCodes?.forEach(code => {
-                Object.values(diagnoses).forEach(diagnose => {
-                    if(diagnose.code === code) newDiagnoses.push(diagnose);
-                });
-            });
-            setPatientDiagnoses({...newDiagnoses as any});
-        });
-        };
-        void setNewPatientDiagnoses();
-    }, [sPatient]);
-
     return (
         <div className="App">
             <p></p>
@@ -42,19 +28,7 @@ const PatientPage = () => {
             </Typography>
             <p>SSN: {sPatient.ssn}</p>
             <p>Occupation: {sPatient.occupation}</p>
-            <Typography align="left" variant="h6">
-                Entries
-            </Typography>
-            <ul>{sPatient.entries?.map((entry : Entry) => (
-                <div key={entry.id}>
-                    <li>{entry.date} {entry.description}</li>
-                    <ul>{Object.values(patientDiagnoses).map((diagnosis : Diagnosis) => (
-                        <li key={diagnosis.name}>{diagnosis.code} {diagnosis.name}</li>
-                    ))}
-                    </ul>
-                </div>
-                ))}
-            </ul>
+            <Entries {...sPatient.entries as Array<Entry>}/>
         </div>
     );
 };
