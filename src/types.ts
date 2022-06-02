@@ -61,6 +61,8 @@ enum healthCheckRating {
   "CriticalRisk" = 3
 }
 
-export type Entry = baseEntry | healthCheckEntry | occupationalHealthcareEntry | hospitalEntry ;
+export type Entry = healthCheckEntry | occupationalHealthcareEntry | hospitalEntry ;
 export type exactEntry = healthCheckEntry | occupationalHealthcareEntry | hospitalEntry ;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+export type EntryFormValues = UnionOmit<Entry, 'id'>;
 

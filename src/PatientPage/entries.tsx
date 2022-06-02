@@ -7,7 +7,7 @@ import "../styles/entries.css";
 const Entries = (entries : Array<Entry>): JSX.Element => {
     if(!entries){return <p></p>;}
     return(
-        <div className="entries">
+        <div>
             <h4>Entries</h4>
             <ul>{Object.values(entries).map((entry : Entry) => {
                     return <EntryComponent key={entry.id} {...entry}/>;
