@@ -1,11 +1,12 @@
 import React from "react";
 import { Grid, Button } from "@material-ui/core";
-import { Field, Formik, Form, useFormikContext } from "formik";
+import { Field, Formik, Form } from "formik";
 
 import { TextField, SelectField, EntryTypeOption, DiagnosisSelection } from "./FormField";
 import { AdditionalFields } from "./AdditionalFields";
 import { EntryFormValues } from "../types";
 import { useStateValue } from "../state";
+import { setAllInitialValues, validateValues } from "./FormikValues";
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -21,36 +22,12 @@ const entryOptions: EntryTypeOption[] = [
 export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
     const [ { diagnoses } ] = useStateValue();
 
-    const AddFields = (): JSX.Element => {
-        const { values } = useFormikContext();
-        // @ts-ignore
-        return AdditionalFields(values.type as string);
-    };
-
     return (
         <Formik
-        initialValues={{
-            type: "HealthCheck",
-            description: "",
-            date: "",
-            specialist: "",
-            healthCheckRating: 0,
-        }}
+        initialValues={setAllInitialValues() as EntryFormValues}
+        enableReinitialize = {true}
         onSubmit={onSubmit}
-        validate={(values) => {
-            const requiredError = "Field is required";
-            const errors: { [field: string]: string } = {};
-            if (!values.description) {
-            errors.description = requiredError;
-            }
-            if (!values.date) {
-            errors.date = requiredError;
-            }
-            if (!values.specialist) {
-            errors.specialist = requiredError;
-            }
-            return errors;
-        }}
+        validate={(values) => {validateValues(values);}}
         >
         {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
             return (
@@ -74,13 +51,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 name="specialist"
                 component={TextField}
                 />
-                <Field
-                label="Occupation"
-                placeholder="Occupation"
-                name="occupation"
-                component={TextField}
-                />
-                <AddFields/>
+                <AdditionalFields/>
                 <DiagnosisSelection setFieldValue={setFieldValue} setFieldTouched={setFieldTouched} diagnoses={Object.values(diagnoses)}/>
                 <Grid>
                 <Grid item>

@@ -28,18 +28,18 @@ export interface baseEntry {
   diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-interface healthCheckEntry extends baseEntry {
+export interface healthCheckEntry extends baseEntry {
   type: "HealthCheck";
   healthCheckRating: healthCheckRating;
 }
 
-interface occupationalHealthcareEntry extends baseEntry {
+export interface occupationalHealthcareEntry extends baseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
   sickLeave?: sickLeave;
 }
 
-interface hospitalEntry extends baseEntry{
+export interface hospitalEntry extends baseEntry{
   type: "Hospital";
   discharge: discharge;
 }

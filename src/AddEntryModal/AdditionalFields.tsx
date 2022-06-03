@@ -1,7 +1,11 @@
-import { Field } from 'formik';
+import { Field, useFormikContext } from 'formik';
+import { EntryFormValues } from '../types';
 import { NumberField, TextField } from './FormField';
 
-const AdditionalFields = (type : string): JSX.Element => {
+const AdditionalFields = (): JSX.Element => {
+    const { values } = useFormikContext();
+    const formValues : EntryFormValues = values as EntryFormValues;
+    const type : string = formValues.type;
     switch (type) {
         case 'HealthCheck':
         return(
@@ -9,6 +13,8 @@ const AdditionalFields = (type : string): JSX.Element => {
             label="Health check rating"
             placeholder="Health check rating"
             name="healthCheckRating"
+            min="0"
+            max="4"
             component={NumberField}
             />
         );
@@ -24,13 +30,13 @@ const AdditionalFields = (type : string): JSX.Element => {
                 <Field
                 label="Starting date of potential sick leave"
                 placeholder="Starting date"
-                name="startDate"
+                name="sickLeave.startDate"
                 component={TextField}
                 />
                 <Field
                 label="Ending date of potential sick leave"
                 placeholder="Ending date"
-                name="endDate"
+                name="sickLeave.endDate"
                 component={TextField}
                 />
             </div>
@@ -41,13 +47,13 @@ const AdditionalFields = (type : string): JSX.Element => {
                 <Field
                 label="Discharge date"
                 placeholder="Date of discharge"
-                name="date"
+                name="discharge.date"
                 component={TextField}
                 />
                 <Field
                 label="Discharge criteria"
                 placeholder="Criteria"
-                name="criteria"
+                name="discharge.criteria"
                 component={TextField}
                 />
             </div>

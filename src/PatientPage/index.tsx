@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import axios from 'axios';
-import { setPatient, useStateValue } from "../state";
+import { useStateValue } from "../state";
 import { Typography, Button } from "@material-ui/core";
 import AddEntryModal from "../AddEntryModal";
 import { Patient, Entry, EntryFormValues } from "../types";
 import { Entries } from "./entries";
 import { apiBaseUrl } from "../constants";
+import { parseValues } from "./entryValues";
 
 const PatientPage = () => {
 
-    const [{ patient }, dispatch] = useStateValue();
+    const [{ patient }] = useStateValue();
     const [sPatient, setsPatient] = useState(patient);
     const [modalOpen, setModalOpen] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string>();
@@ -17,29 +18,30 @@ const PatientPage = () => {
     const openModal = (): void => setModalOpen(true);
   
     const closeModal = (): void => {
-      setModalOpen(false);
-      setError(undefined);
+        setModalOpen(false);
+        setError(undefined);
     };
   
-    const submitNewEntry = async (values: EntryFormValues) => {
-    try {
-        const { data: newEntry } = await axios.post<Entry>(
-            `${apiBaseUrl}/patients/:${sPatient.id}`,
-            values
-        );
-        if(!sPatient.entries){sPatient.entries = [];}
-        sPatient.entries = sPatient.entries.concat(newEntry);
-        dispatch(setPatient(sPatient));
-        closeModal();
-        } catch (e: unknown) {
-            if (axios.isAxiosError(e)) {
-                console.error(e?.response?.data || "Unrecognized axios error");
-                setError(String(e?.response?.data?.error) || "Unrecognized axios error");
-            } else {
-                console.error("Unknown error", e);
-                setError("Unknown error");
+    const submitNewEntry = async (values : EntryFormValues) => {
+        console.log(values);
+        const parsedValues : EntryFormValues = parseValues(values);
+        try {
+            const { data: newEntry } = await axios.post<Entry>(
+                `${apiBaseUrl}/patients/:${sPatient.id}`,
+                parsedValues
+            );
+            if(!sPatient.entries){sPatient.entries = [];}
+            sPatient.entries.push(newEntry);
+            closeModal();
+            } catch (e: unknown) {
+                if (axios.isAxiosError(e)) {
+                    console.error(e?.response?.data || "Unrecognized axios error");
+                    setError(String(e?.response?.data?.error) || "Unrecognized axios error");
+                } else {
+                    console.error("Unknown error", e);
+                    setError("Unknown error");
+                }
             }
-        }
     };
 
     React.useEffect(() => {
@@ -50,7 +52,7 @@ const PatientPage = () => {
                         });
         };
         void getInfo();
-    }, [patient]);
+    }, [patient, patient.entries]);
 
     return (
         <div className="App">
