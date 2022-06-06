@@ -83,6 +83,9 @@ const validateValues = (values : EntryFormValues) => {
             if (!OccValues.specialist) {
                 errors.specialist = requiredError;
             }
+            if (!OccValues.employerName) {
+                errors.employerName = requiredError;
+            }
             return errors;
         case 'Hospital':
             const hosValues = values as unknown as hospitalEntry;
@@ -95,11 +98,43 @@ const validateValues = (values : EntryFormValues) => {
             if (!hosValues.specialist) {
                 errors.specialist = requiredError;
             }
-            if (!hosValues.specialist) {
-                errors.specialist = requiredError;
+            if (!hosValues.discharge.criteria) {
+                errors.dischargeCriteria = requiredError;
+            }
+            if (!hosValues.discharge.date) {
+                errors.dischargeDate = requiredError;
             }
             return errors;
     }
 };
 
-export { setInitialValues, setAllInitialValues, validateValues };
+const validateAll = (values : EntryFormValues | any) => {
+    const requiredError = "Field is required";
+    const errors: { [field: string]: string } = {};
+    if (!values.description) {
+        errors.description = requiredError;
+    }
+    if (!values.date) {
+        errors.date = requiredError;
+    }
+    if (!values.specialist) {
+        errors.specialist = requiredError;
+    }
+    if (!values.healthCheckRating) {
+        errors.healthCheckRating = requiredError;
+    }
+    if (!values.discharge.criteria) {
+        errors.dischargeCriteria = requiredError;
+    }
+    if (!values.discharge.date) {
+        errors.dischargeCriteria = requiredError;
+    }
+    return errors;
+};
+
+const validateField = (value: string) => {
+    const requiredError = "Field is required";
+    if(!value) return requiredError;
+};
+
+export { setInitialValues, setAllInitialValues, validateValues, validateAll, validateField };

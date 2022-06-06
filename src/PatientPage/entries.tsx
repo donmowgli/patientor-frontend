@@ -1,6 +1,5 @@
 
 import { Entry, exactEntry, Diagnosis } from '../types';
-import { assertNever } from 'assert-never';
 import { useStateValue } from '../state';
 import "../styles/entries.css";
 
@@ -59,8 +58,6 @@ const Exact = (entry : exactEntry): JSX.Element => {
                 </div>
             );
         }
-        default:
-            return assertNever(entry, true);
     }
 };
 

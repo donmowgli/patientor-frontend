@@ -23,15 +23,13 @@ const PatientPage = () => {
     };
   
     const submitNewEntry = async (values : EntryFormValues) => {
-        console.log(values);
         const parsedValues : EntryFormValues = parseValues(values);
         try {
             const { data: newEntry } = await axios.post<Entry>(
-                `${apiBaseUrl}/patients/:${sPatient.id}`,
+                `${apiBaseUrl}/patients/${sPatient.id}`,
                 parsedValues
             );
-            if(!sPatient.entries){sPatient.entries = [];}
-            sPatient.entries.push(newEntry);
+            setsPatient(newEntry as unknown as Patient);
             closeModal();
             } catch (e: unknown) {
                 if (axios.isAxiosError(e)) {

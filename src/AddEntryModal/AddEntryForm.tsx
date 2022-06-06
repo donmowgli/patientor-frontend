@@ -6,7 +6,7 @@ import { TextField, SelectField, EntryTypeOption, DiagnosisSelection } from "./F
 import { AdditionalFields } from "./AdditionalFields";
 import { EntryFormValues } from "../types";
 import { useStateValue } from "../state";
-import { setAllInitialValues, validateValues } from "./FormikValues";
+import { setAllInitialValues, validateAll, validateField } from "./FormikValues";
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
@@ -27,7 +27,7 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
         initialValues={setAllInitialValues() as EntryFormValues}
         enableReinitialize = {true}
         onSubmit={onSubmit}
-        validate={(values) => {validateValues(values);}}
+        validate={(values) => {validateAll(values) as {[field: string]: string};}}
         >
         {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
             return (
@@ -38,18 +38,21 @@ export const AddEntryForm = ({ onSubmit, onCancel }: Props) => {
                 placeholder="Description"
                 name="description"
                 component={TextField}
+                validate={validateField}
                 />
                 <Field
                 label="Date"
                 placeholder="YYYY-MM-DD"
                 name="date"
                 component={TextField}
+                validate={validateField}
                 />
                 <Field
                 label="Specialist"
                 placeholder="Name of the treating specialist"
                 name="specialist"
                 component={TextField}
+                validate={validateField}
                 />
                 <AdditionalFields/>
                 <DiagnosisSelection setFieldValue={setFieldValue} setFieldTouched={setFieldTouched} diagnoses={Object.values(diagnoses)}/>

@@ -1,6 +1,7 @@
 import { Field, useFormikContext } from 'formik';
 import { EntryFormValues } from '../types';
 import { NumberField, TextField } from './FormField';
+import { validateField } from './FormikValues';
 
 const AdditionalFields = (): JSX.Element => {
     const { values } = useFormikContext();
@@ -16,6 +17,7 @@ const AdditionalFields = (): JSX.Element => {
             min="0"
             max="4"
             component={NumberField}
+            validate={validateField}
             />
         );
         case 'OccupationalHealthcare':
@@ -26,6 +28,7 @@ const AdditionalFields = (): JSX.Element => {
                 placeholder="Employer name"
                 name="employerName"
                 component={TextField}
+                validate={validateField}
                 />
                 <Field
                 label="Starting date of potential sick leave"
@@ -49,12 +52,14 @@ const AdditionalFields = (): JSX.Element => {
                 placeholder="Date of discharge"
                 name="discharge.date"
                 component={TextField}
+                validate={validateField}
                 />
                 <Field
                 label="Discharge criteria"
                 placeholder="Criteria"
                 name="discharge.criteria"
                 component={TextField}
+                validate={validateField}
                 />
             </div>
         );
